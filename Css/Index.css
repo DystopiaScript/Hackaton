@@ -8,7 +8,7 @@ header {
     background-color: beige;
     color: white;
     text-align: center;
-    padding: 10px;
+    padding: 20px;
     width: 100%;
 
 
@@ -32,4 +32,14 @@ nav ul {
 
 nav ul li {
     padding: 10px;
+    color: #000;
+    font-family: sans-serif, "Helvetica Neue", Helvetica, Arial;
+}
+
+main {
+    width: 80%;
+
+    margin: 0 auto;
+    background-color: aliceblue;
+
 }
