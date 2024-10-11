@@ -1,39 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
-import {collection, getDocs, getDoc, deletDoc} from "firebase/firestore";
-import {db} from "../firebaseConfig/firesbase";
+import { initializeApp } from "firebase/app";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
-const MySwal = withReactContent(Swal);
+// Firebase configuration
+const firebaseConfig = {
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+};
 
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
+// Initialize Google Auth provider
+const provider = new GoogleAuthProvider();
 
-const Show = () => {
-    //1 - configuramos los hooks
+// Async login function
+export async function login() {
+  const auth = getAuth();
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    const token = credential.accessToken;
+    const user = result.user;
 
-    const [Services, setServices] = useState([]);
-
-    //2 - referenciamos la DB firestore
-
-    const ServicesCollection = collection(db, "Services");
-
-    //3 - Funcion para mostrar Todos los docs
-
-    const getServices = async () => {
-        // const data = await getDocs(collection(ServicesCollection));
-        const data = await getDocs(ServicesCollection)
-        console.log(data.docs)
-    };
-        //6 - Usamos useEffect
-        useEffect(() => {
-            getServices();
-        }, []);
-   
-    return (
-        <div>
-        <h1>Show</h1>
-        </div>
-    );
-    };
-    export default Show;
+    console.log("User:", user);
+    console.log("Token:", token);
+  } catch (e) {
+    console.error("Error during login:", e);
+  }
+}
